@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Backslash Trash</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+	<script src="./Boston_PopDens10_tWb.json"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+	
+	<script src="locations.js"></script>
+	
+    <script>
+
+      function initMap() {
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 13,
+		    center: {lat: 42.3601, lng: -71.0589}
+        });
+		
+  	  	for (let loc of locations) {
+  	  		console.log(loc)
+  			var x = loc[0]
+  			var y = loc[1]
+        	var marker = new google.maps.Marker({
+				position: {lat: x, lng: y},
+          	    map: map,
+          	    title: 'Big Belly!'
+        	});
+	  	}
+		
+		var outerCoords = [
+			{lat: -72.3395180809189, lng: 41.6348179820952},
+			{lat: -72.3395180809189, lng: 43.1319950773011},
+			{lat: -69.9363189433254, lng: 43.1319950773011},
+			{lat: -69.9363189433254, lng: 41.6348179820952},
+			{lat: -72.3395180809189, lng: 41.6348179820952}
+		];
+		map.data.add({geometry: new google.maps.Data.Polygon([outerCoords])})
+		map.data.addGeoJson(dataTrash);
+		
+		map.data.setStyle(function(feature){
+			var popdens = feature.getProperty('POP10_SQMI')
+			if (popdens > 0 && popdens <= 3771){
+				return {
+					fillColor:'Khaki',
+					fillOpacity:0.5
+				}
+			}
+				
+			else if (popdens > 3771 && popdens <= 10349){
+				return {
+					fillColor:'Gold',
+					fillOpacity:0.5
+				}
+			}
+			
+			else if  (popdens > 10349 && popdens <= 20440){
+				return {
+					fillColor:'Orange',
+					fillOpacity:0.5
+				}
+			}
+			
+			else if (popdens > 20440 && popdens <= 39317){
+				return{
+					fillColor:'Red',
+					fillOpacity:0.5
+				}
+			}
+			
+			else if (popdens > 39317 && popdens <= 108044){
+				return{
+					fillColor:'DarkRed',
+					fillOpacity:0.5
+				}
+			}
+				
+		
+		})
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0KTquKd7wINTzWP47ClmloJ4lR_aK-F0&callback=initMap">
+    </script>
+  </body>
+</html>
